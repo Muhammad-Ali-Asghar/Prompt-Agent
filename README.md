@@ -29,7 +29,7 @@ graph TD
     
     subgraph "Agent Synthesis"
         AgentPath --> Synthesis[LLM Synthesis]
-        Synthesis --> Structured[Structured Agent Prompt\n(Identity, roles, Schema)]
+        Synthesis --> Structured["Structured Agent Prompt\n(Identity, roles, Schema)"]
     end
     
     subgraph "Standard Assembly"
