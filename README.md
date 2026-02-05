@@ -26,9 +26,10 @@ graph LR
     Engine --> Synthesis[AI Agent Synthesis]
     Synthesis --> Output[High-Quality Prompt]
     
-    style Input fill:#e1f5fe,stroke:#01579b
-    style Output fill:#e8f5e9,stroke:#2e7d32
-    style Synthesis fill:#fff3e0,stroke:#ef6c00
+    style Input fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    style Engine fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    style Synthesis fill:#D1C4E9,stroke:#512DA8,stroke-width:2px,color:#000
+    style Output fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
 ```
 
 ## Features
