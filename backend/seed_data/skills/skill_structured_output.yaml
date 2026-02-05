@@ -1,0 +1,41 @@
+- id: skill_structured_output
+  name: Structured Output Generation
+  description: The ability to generate machine-readable structured outputs like JSON, XML, CSV, or Markdown tables. Essential for building applications that programmatically consume AI outputs.
+  when_to_use: When building API integrations, data extraction pipelines, form filling automation, database population, or configuration generation.
+  inputs:
+    - Desired output format (JSON, YAML, CSV, Markdown, XML)
+    - Data to structure or extract
+    - Schema or template (optional)
+  outputs:
+    - Properly formatted structured data
+    - Valid syntax ready for programmatic parsing
+  steps:
+    - Identify the required output format
+    - Define the schema or structure explicitly
+    - Provide an example of the desired output
+    - Request validation ("Ensure the JSON is valid")
+    - Handle edge cases (nulls, special characters)
+  do_not:
+    - Assume the model will infer the structure
+    - Skip providing examples for complex formats
+    - Forget to handle null values
+    - Ignore proper escaping of special characters
+  example: |
+    Request: Extract the following information as JSON:
+    {
+      "name": "string",
+      "email": "string",
+      "company": "string",
+      "role": "string"
+    }
+    
+    Text: "John Smith works as a Software Engineer at TechCorp. 
+    His email is john.smith@techcorp.com"
+    
+    Response:
+    {
+      "name": "John Smith",
+      "email": "john.smith@techcorp.com",
+      "company": "TechCorp",
+      "role": "Software Engineer"
+    }

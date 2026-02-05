@@ -1,0 +1,46 @@
+- id: skill_code_review
+  name: Code Review
+  description: The ability to systematically analyze code for bugs, security vulnerabilities, performance issues, and adherence to best practices. A critical skill for maintaining code quality in software projects.
+  when_to_use: During pull request reviews, security audits, code quality assessments, refactoring recommendations, or code learning sessions.
+  inputs:
+    - Code to review
+    - Programming language
+    - Context about the codebase (optional)
+    - Specific concerns to check (optional)
+  outputs:
+    - List of issues found with severity ratings
+    - Location of each issue
+    - Recommended fixes
+    - Positive feedback on good practices
+  steps:
+    - Check for correctness (does it do what it should?)
+    - Check for security vulnerabilities (injection, auth, etc.)
+    - Check for performance issues (inefficiencies, N+1)
+    - Check for readability (naming, structure, comments)
+    - Check for maintainability (DRY, single responsibility)
+    - Provide actionable suggestions for improvements
+  do_not:
+    - Just say "looks good" without thorough analysis
+    - Focus only on style issues while missing bugs
+    - Ignore security implications
+    - Give criticism without suggestions for improvement
+    - Miss error handling edge cases
+  security_notes:
+    - Always check for SQL injection
+    - Look for hardcoded secrets
+    - Verify input validation
+    - Check authentication and authorization
+  example: |
+    Code Review for: user_login function
+    
+    Issues Found:
+    | Severity | Line | Issue | Fix |
+    |----------|------|-------|-----|
+    | Critical | 15 | SQL injection in query | Use parameterized query |
+    | High | 23 | Password stored in plain text | Hash with bcrypt |
+    | Medium | 8 | No rate limiting | Add login attempt limiting |
+    | Low | 31 | Magic number 30 | Extract to constant SESSION_TIMEOUT |
+    
+    Positive:
+    - Good error handling structure
+    - Clear variable naming

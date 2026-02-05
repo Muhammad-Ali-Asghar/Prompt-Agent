@@ -1,0 +1,33 @@
+- id: skill_chain_of_thought
+  name: Chain-of-Thought Reasoning
+  description: The ability to break down complex problems into step-by-step reasoning, showing the thought process that leads to a conclusion. This technique improves accuracy on math, logic, and multi-step reasoning tasks.
+  when_to_use: For complex mathematical calculations, multi-step logic problems, tasks requiring justification, debugging and troubleshooting, or decision-making with multiple factors.
+  inputs:
+    - Complex problem or question
+    - Relevant context or constraints
+  outputs:
+    - Step-by-step reasoning process
+    - Clear intermediate conclusions
+    - Final answer with justification
+  steps:
+    - Add "Let's think step by step" to encourage reasoning
+    - Break the problem into smaller sub-problems
+    - Show calculations or logic at each step
+    - State intermediate conclusions explicitly
+    - Verify the final answer
+  do_not:
+    - Skip steps in the reasoning process
+    - Jump directly to the answer for complex problems
+    - Assume intermediate steps are obvious
+    - Forget to verify the final conclusion
+  example: |
+    Problem: If a store offers 20% off and then an additional 10% off the sale price, what is the total discount on a $100 item?
+    
+    Let me think through this step by step:
+    1. Start with $100
+    2. Apply 20% off: $100 × 0.80 = $80
+    3. Apply 10% off the sale price: $80 × 0.90 = $72
+    4. Total savings: $100 - $72 = $28
+    5. Total discount percentage: $28 / $100 = 28%
+    
+    The total discount is 28%, not 30% as simple addition would suggest.

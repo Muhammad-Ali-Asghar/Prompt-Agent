@@ -1,0 +1,124 @@
+- id: skill_system_design_principles
+  name: System Design Principles
+  description: Core principles for designing scalable, maintainable, and reliable software systems (CAP, SOLID, DRY).
+  when_to_use: When designing new system architecture, microservices, or making high-level technical decisions.
+  inputs:
+    - System requirements
+    - Scale constraints (users, data volume)
+    - Reliability targets (SLA/SLO)
+  outputs:
+    - Architectural decisions
+    - Trade-off analysis
+    - Design patterns applied
+  steps:
+    - Analyze requirements (Functional vs Non-functional)
+    - Apply CAP Theorem (Consistency vs Availability in Partition)
+    - Define data models and access patterns
+    - Choose appropriate storage technologies
+    - Design for failure (Retries, Circuit Breakers)
+    - Review against SOLID principles
+  do_not:
+    - Optimize prematurely
+    - Use complex patterns for simple problems
+    - Ignore operational complexity
+    - Forget about data migration
+  security_notes:
+    - Design security in from the start (Security by Design)
+    - Principle of Least Privilege for all components
+    - assume zero trust networking
+  example: |
+    Scenario: Designing a distributed chat application
+    
+    Decision: Use Event Sourcing
+    - Pros: Complete audit trail, easy replay, scalability
+    - Cons: Complexity, eventual consistency
+    
+    Trade-off (CAP): CP system for chat history (Consistency over Availability) implies potential downtime during partitions, but messages won't be lost/reordered.
+    
+    SOLID Check:
+    - Single Responsibility: Separate Write Model and Read Model (CQRS)
+
+- id: skill_code_refactoring
+  name: Code Refactoring
+  description: disciplined technique for restructuring an existing body of code, creating an internal structure without changing its external behavior.
+  when_to_use: When code becomes hard to maintain, before adding complex new features, or during code reviews.
+  inputs:
+    - Existing code base
+    - Test suite (must pass)
+    - Code smell identification
+  outputs:
+    - Refactored code
+    - Unchanged test results
+    - Improved readability/maintainability
+  steps:
+    - Ensure all tests pass (Green state)
+    - Identify code smells (Long Method, Large Class, Duplication)
+    - Apply refactoring moves (Extract Method, Rename Variable, Move Class)
+    - Run tests after EVERY small change
+    - Commit frequently
+  do_not:
+    - Refactor and add features simultaneously
+    - Refactor without test coverage
+    - Change external behavior (APIs)
+    - Get stuck in "Refactoring Hell" (know when to stop)
+  security_notes:
+    - Ensure security controls are not bypassed
+    - Watch for logic errors introduced during simplification
+    - check for "optimizations" that remove timing safeguards
+  example: |
+    Before:
+    def process_order(order):
+        # 50 lines of validation
+        # 30 lines of payment processing
+        # 20 lines of email notification
+        
+    Refactoring: Extract Method
+    
+    After:
+    def process_order(order):
+        validate_order(order)
+        process_payment(order)
+        send_confirmation(order)
+        
+    Result: Improved readability, easier testing of individual components.
+
+- id: skill_tdd_cycle
+  name: Test Driven Development (TDD)
+  description: Software development process relying on software requirements being converted to test cases before software is fully developed.
+  when_to_use: When writing complex logic, fixing bugs, or ensuring high code quality from the start.
+  inputs:
+    - Feature requirement
+    - Empty or failing test case
+  outputs:
+    - Minimal code to pass test
+    - Refactored clean code
+    - Comprehensive test suite
+  steps:
+    - Red: Write a failing test for a small piece of functionality
+    - Green: Write the minimal code necessary to pass the test
+    - Refactor: Improve code quality while keeping tests green
+    - Repeat: Pick the next small requirement
+  do_not:
+    - Write all tests at once
+    - Write more code than needed to pass the test
+    - Skip the Refactor step
+    - Modify tests to match buggy code
+  security_notes:
+    - Write negative tests for security boundaries
+    - Test failure modes and error handling
+    - Mock external security services carefully
+  example: |
+    Goal: Validate email address
+    
+    1. Red: 
+       test_validate_email_empty_fails() -> Fails (Function doesn't exist)
+       
+    2. Green:
+       def validate_email(e): return False if not e else True
+       -> Passes
+       
+    3. Refactor:
+       (Nothing to refactor yet)
+       
+    4. Red (Next):
+       test_validate_email_no_at_sign_fails() -> Fails

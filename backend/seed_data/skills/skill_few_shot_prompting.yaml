@@ -1,0 +1,33 @@
+- id: skill_few_shot_prompting
+  name: Few-Shot Prompting
+  description: The technique of providing examples in the prompt to demonstrate the desired task format, style, or behavior. The model learns the pattern from examples and applies it to new inputs.
+  when_to_use: When you need custom formatting requirements, specific output styles, domain-specific terminology, consistent behavior across inputs, or classification tasks.
+  inputs:
+    - Task description
+    - 2-5 example input-output pairs
+    - New input to process
+  outputs:
+    - Output following the demonstrated pattern
+    - Consistent style with examples
+  steps:
+    - Choose diverse examples covering different cases
+    - Format examples consistently (same structure for all)
+    - Use clear delimiters to separate examples
+    - Place most relevant examples last (recency effect)
+    - Present the new input in the same format
+  do_not:
+    - Use too many examples (wastes context window)
+    - Use inconsistent formatting across examples
+    - Forget to show both input AND output for each example
+    - Use examples that don't represent the target task
+  example: |
+    Convert sentences to formal language:
+    
+    Input: "gonna grab some food"
+    Output: "I am going to obtain some food"
+    
+    Input: "wanna hang out later?"
+    Output: "Would you like to spend time together later?"
+    
+    Input: "that's cool"
+    Output: "That is acceptable"

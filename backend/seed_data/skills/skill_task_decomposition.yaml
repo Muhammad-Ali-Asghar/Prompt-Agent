@@ -1,0 +1,48 @@
+- id: skill_task_decomposition
+  name: Task Decomposition
+  description: The ability to break down complex goals into smaller, manageable subtasks with clear dependencies and execution order. Essential for project planning, agent orchestration, and multi-step problem solving.
+  when_to_use: For project planning and roadmaps, complex feature implementation, multi-agent task assignment, sprint planning, or any problem-solving with multiple steps.
+  inputs:
+    - High-level goal or objective
+    - Constraints and timeline (optional)
+    - Available resources or roles (optional)
+  outputs:
+    - Hierarchical task breakdown
+    - Dependencies between tasks
+    - Effort estimates (S/M/L)
+    - Execution order or waves
+  steps:
+    - Identify the main goal and success criteria
+    - Break into major milestones or phases
+    - Decompose milestones into specific tasks
+    - Identify dependencies (what blocks what)
+    - Estimate effort for each task
+    - Determine which tasks can run in parallel
+    - Define acceptance criteria for each task
+  do_not:
+    - Create tasks that are too vague ("work on it")
+    - Skip defining acceptance criteria
+    - Ignore dependencies between tasks
+    - Make tasks too large (decompose further)
+    - Forget to identify parallel execution opportunities
+  example: |
+    Goal: Build a user authentication system
+    
+    Milestone 1: Setup
+    - T1: Initialize project structure [S, no deps]
+    - T2: Set up database schema [S, depends: T1]
+    
+    Milestone 2: Core Implementation  
+    - T3: Implement user registration [M, depends: T2]
+    - T4: Implement login endpoint [M, depends: T2]
+    - T5: Implement password hashing [S, depends: T2]
+    
+    Milestone 3: Security
+    - T6: Add rate limiting [S, depends: T3, T4]
+    - T7: Implement JWT tokens [M, depends: T4]
+    
+    Execution Waves:
+    Wave 1: [T1]
+    Wave 2: [T2]
+    Wave 3: [T3, T4, T5] - parallel
+    Wave 4: [T6, T7] - parallel

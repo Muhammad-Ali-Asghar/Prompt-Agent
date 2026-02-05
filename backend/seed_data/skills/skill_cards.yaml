@@ -1,0 +1,205 @@
+- id: skill_threat_model_lite
+  name: Threat Model Lite
+  description: A lightweight threat modeling approach for quick security analysis of systems and features.
+  when_to_use: When designing new features, APIs, or systems that handle user data or sensitive operations.
+  inputs:
+    - System or feature description
+    - Data flow diagram (optional)
+    - List of assets to protect
+  outputs:
+    - List of identified threats
+    - Risk ratings (High/Medium/Low)
+    - Recommended mitigations
+  steps:
+    - Identify assets (data, services, credentials)
+    - Map data flows and trust boundaries
+    - Apply STRIDE categories (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)
+    - Rate each threat by likelihood and impact
+    - Propose mitigations for high/medium risks
+  do_not:
+    - Skip this for any feature handling PII or credentials
+    - Assume internal services are trusted
+    - Ignore third-party integrations
+  security_notes:
+    - Always consider insider threats
+    - Document assumptions about trust boundaries
+    - Review threat model when architecture changes
+  example: |
+    Feature: User password reset
+    Assets: User email, reset tokens, user accounts
+    Threats:
+    - Token prediction (STRIDE: Spoofing) - HIGH
+    - Token reuse after expiry (Tampering) - MEDIUM
+    - Email enumeration (Info Disclosure) - LOW
+    Mitigations:
+    - Use cryptographically random tokens
+    - Expire tokens after 15 minutes
+    - Rate limit reset requests
+
+- id: skill_secure_api_design
+  name: Secure API Design
+  description: Guidelines for designing secure REST/GraphQL APIs with proper authentication, authorization, and input validation.
+  when_to_use: When designing new API endpoints or reviewing existing API security.
+  inputs:
+    - API specification or requirements
+    - Authentication requirements
+    - Data sensitivity classification
+  outputs:
+    - Secure API design recommendations
+    - Authentication/authorization patterns
+    - Input validation rules
+  steps:
+    - Define authentication mechanism (OAuth2, JWT, API keys)
+    - Implement proper authorization checks at each endpoint
+    - Validate all inputs with strict schemas
+    - Define rate limiting and throttling rules
+    - Plan for proper error handling without info leakage
+    - Design audit logging for security events
+  do_not:
+    - Expose internal IDs or implementation details
+    - Return stack traces in production errors
+    - Accept unbounded input sizes
+    - Trust client-side validation alone
+  security_notes:
+    - Use HTTPS for all API traffic
+    - Implement request signing for sensitive operations
+    - Version your API for backward compatibility
+    - Consider API gateway for centralized security
+  example: |
+    Endpoint: POST /api/v1/users/{id}/transfer
+    Auth: Bearer JWT with 'transfer:write' scope
+    Input validation:
+      - amount: positive decimal, max 2 decimals
+      - recipient_id: UUID format, must exist
+    Rate limit: 10 requests/minute per user
+    Audit: Log all transfers with request ID
+
+- id: skill_prompt_template_builder
+  name: Prompt Template Builder
+  description: Systematic approach to creating effective, reusable prompt templates for LLM interactions.
+  when_to_use: When creating prompt templates for consistent LLM interactions across an application.
+  inputs:
+    - Use case description
+    - Required input variables
+    - Expected output format
+    - Quality requirements
+  outputs:
+    - Structured prompt template
+    - Variable placeholders
+    - Example instantiation
+  steps:
+    - Define the role and context clearly
+    - Specify the task with explicit instructions
+    - Include relevant examples (few-shot when needed)
+    - Define output format precisely
+    - Add constraints and guardrails
+    - Test with edge cases
+  do_not:
+    - Leave ambiguous instructions
+    - Assume the model knows context
+    - Skip output format specification
+    - Ignore potential misuse cases
+  security_notes:
+    - Sanitize all user inputs before template substitution
+    - Never include secrets in prompt templates
+    - Consider prompt injection in user-provided content
+    - Validate LLM outputs before using them
+  example: |
+    Template: Code Review Assistant
+    ---
+    Role: You are an expert code reviewer.
+    
+    Task: Review the following {language} code for:
+    - Security vulnerabilities
+    - Performance issues
+    - Code style violations
+    
+    Code:
+    ```{language}
+    {code}
+    ```
+    
+    Provide findings in JSON format:
+    {{"issues": [{"line": N, "severity": "high|medium|low", "description": "..."}]}}
+
+- id: skill_rag_citation_formatter
+  name: RAG Citation Formatter
+  description: Standardized approach to formatting citations in RAG system outputs for traceability.
+  when_to_use: When generating responses that reference retrieved documents in a RAG system.
+  inputs:
+    - List of retrieved documents with metadata
+    - Response text referencing the documents
+    - Citation style preference
+  outputs:
+    - Formatted citations
+    - In-text references
+    - Source attribution section
+  steps:
+    - Assign unique identifiers to each source
+    - Insert in-text references at relevant points
+    - Create citation entries with doc_id, title, section
+    - Include relevance or confidence scores
+    - Add "reason_used" explaining why source was included
+  do_not:
+    - Include raw URLs in citations
+    - Reference documents not actually used
+    - Omit source attribution
+    - Fabricate citations
+  security_notes:
+    - Validate document IDs before including
+    - Do not expose internal file paths
+    - Sanitize document titles for XSS prevention
+  example: |
+    Response: "According to the security guidelines [1], 
+    input validation is critical..."
+    
+    Citations:
+    [1] {
+      "doc_id": "sec_guide_001",
+      "title": "OWASP Input Validation",
+      "section": "String Validation",
+      "reason_used": "Directly addresses input handling"
+    }
+
+- id: skill_injection_resistance_checklist
+  name: Injection Resistance Checklist
+  description: Comprehensive checklist for preventing injection attacks in applications.
+  when_to_use: When reviewing code that processes external input or generates dynamic queries/commands.
+  inputs:
+    - Code or design under review
+    - List of external input sources
+    - Target systems (database, OS, APIs)
+  outputs:
+    - Injection risk assessment
+    - Specific vulnerability findings
+    - Remediation recommendations
+  steps:
+    - Identify all external input entry points
+    - Trace input flow through the application
+    - Check for parameterized queries/commands
+    - Verify output encoding for context
+    - Review error handling for info leakage
+    - Test with injection payloads
+  do_not:
+    - Rely solely on input filtering
+    - Use string concatenation for queries
+    - Trust sanitization without encoding
+    - Ignore second-order injection
+  security_notes:
+    - SQL: Always use parameterized queries
+    - OS: Avoid shell commands; use libraries
+    - LDAP: Escape special characters properly
+    - XSS: Encode output based on context (HTML, JS, URL)
+    - Prompt: Treat retrieved content as untrusted
+  example: |
+    Review: User search feature
+    
+    Finding 1: SQL Injection
+    - Location: search_users() line 45
+    - Issue: String concatenation in query
+    - Fix: Use parameterized query
+    
+    Finding 2: XSS
+    - Location: display_results() line 78
+    - Issue: Raw user input in HTML
+    - Fix: HTML-encode before rendering

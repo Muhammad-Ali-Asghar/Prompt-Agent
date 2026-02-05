@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      # Use host network during build to fix apt-get issues
+      
+    container_name: prompt-rag-backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - API_KEYS=${API_KEYS:-dev-key-12345}
+      - DEBUG=${DEBUG:-false}
+    volumes:
+      - chroma_data:/app/data/chroma_db
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      # Use host network during build
+      
+    container_name: prompt-rag-frontend
+    user: root # Required for hot reloading to write to mounted volume
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      # Next.js server needs to reach backend container via bridge network alias
+      - INTERNAL_API_URL=${BACKEND_API_URL:-http://backend:8000}
+      - NEXT_PUBLIC_API_URL=${BACKEND_API_URL:-http://backend:8000}
+    depends_on:
+      backend:
+        condition: service_started
+    command: npm run dev
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+    driver: local
