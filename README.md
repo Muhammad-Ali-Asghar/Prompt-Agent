@@ -1,6 +1,6 @@
 # Prompt RAG Agent
 
-A production-ready Retrieval-Augmented Generation (RAG) system for generating high-quality, structured system prompts for downstream LLMs (Gemini, Claude, GPT).
+A Retrieval-Augmented Generation (RAG) system for generating high-quality, structured system prompts for downstream LLMs (Gemini, Claude, GPT).
 
 This system specifically excels at:
 - **Agentic Workflows:** Synthesizing complex multi-agent system prompts.
@@ -10,41 +10,25 @@ This system specifically excels at:
 ## System Workflow
 
 ```mermaid
-graph TD
-    User[User Request] --> API[FastAPI Endpoint]
-    API --> Security[Security & Validation]
-    Security --> Intent[Intent Classifier]
+graph LR
+    Input[User Request] --> Engine{RAG Engine}
     
-    Intent -- "Agent Build Request" --> AgentPath[Agent Synthesis Chain]
-    Intent -- "Standard Request" --> StdPath[Standard Assembly Chain]
-    
-    subgraph "RAG Pipeline"
-        Retriever[Multi-Source Retriever]
-        Store[(ChromaDB)]
-        Store --> Retriever
-        
-        Retriever -- "Retrieve Context" --> AgentPath
-        Retriever -- "Retrieve Context" --> StdPath
+    subgraph "Knowledge Base"
+        Patterns[Prompt Patterns]
+        Skills[Skill Cards]
+        Rules[Security Guidelines]
     end
     
-    subgraph "Agent Synthesis"
-        AgentPath --> Synthesis[LLM Synthesis]
-        Synthesis --> Structured["Structured Agent Prompt\n(Identity, roles, Schema)"]
-    end
+    Patterns --> Engine
+    Skills --> Engine
+    Rules --> Engine
     
-    subgraph "Standard Assembly"
-        StdPath --> Assembly[Rule-Based Builder]
-        Assembly --> Plain[Optimized System Prompt]
-    end
+    Engine --> Synthesis[AI Agent Synthesis]
+    Synthesis --> Output[High-Quality Prompt]
     
-    Structured --> Quality[Quality Gates]
-    Plain --> Quality
-    
-    Quality -- "Pass" --> Redact[Secret Redaction]
-    Quality -- "Fail" --> Warnings[Add Warnings]
-    Warnings --> Redact
-    
-    Redact --> Final[Final Response]
+    style Input fill:#e1f5fe,stroke:#01579b
+    style Output fill:#e8f5e9,stroke:#2e7d32
+    style Synthesis fill:#fff3e0,stroke:#ef6c00
 ```
 
 ## Features
@@ -150,7 +134,3 @@ The system comes pre-seeded with industry best practices:
 - **Guidelines**: OpenAI/Anthropic/Google prompt engineering rules.
 - **Patterns**: Multi-agent design, System prompt templates.
 - **Skills**: Chain-of-Thought, Few-Shot Prompting, Structured Output generation.
-
-## License
-
-MIT
